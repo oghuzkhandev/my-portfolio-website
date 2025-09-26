@@ -39,10 +39,10 @@ export const AnimatedTooltip = ({
   };
 
   return (
-    <div className={cn("flex flex-row", className)}>
+    <div className={cn("flex flex-wrap gap-6 justify-center", className)}>
       {items.map((item) => (
         <div
-          className="-mr-4 relative group"
+          className="relative group"
           key={item.name}
           onMouseEnter={() => setHoveredIndex(item.id)}
           onMouseLeave={() => setHoveredIndex(null)}
@@ -67,10 +67,11 @@ export const AnimatedTooltip = ({
                   rotate: rotate,
                   whiteSpace: "nowrap",
                 }}
-                className="absolute -top-16 -left-1/2 translate-x-1/2 flex text-xs flex-col items-center justify-center rounded-md bg-background/90 backdrop-blur-sm z-50 shadow-xl px-4 py-2 border border-border"
+                className="absolute -top-16 left-1/2 -translate-x-1/2 
+                           flex flex-col items-center justify-center 
+                           rounded-md bg-background/90 backdrop-blur-sm 
+                           z-50 shadow-xl px-4 py-2 border border-border"
               >
-                <div className="absolute inset-x-10 z-30 w-[20%] -bottom-px bg-gradient-to-r from-transparent via-primary to-transparent h-px" />
-                <div className="absolute left-10 w-[40%] z-30 -bottom-px bg-gradient-to-r from-transparent via-accent to-transparent h-px" />
                 <div className="font-bold text-foreground relative z-30 text-base">
                   {item.name}
                 </div>
@@ -84,7 +85,9 @@ export const AnimatedTooltip = ({
           </AnimatePresence>
           <div
             onMouseMove={handleMouseMove}
-            className="h-14 w-14 rounded-full bg-gradient-to-br from-primary/20 to-accent/20 border-2 border-primary/50 flex items-center justify-center text-sm font-semibold"
+            className="h-14 w-14 rounded-full bg-gradient-to-br from-primary/20 to-accent/20 
+                       border-2 border-primary/50 flex items-center justify-center 
+                       text-sm font-semibold"
           >
             {item.image ? (
               <img
