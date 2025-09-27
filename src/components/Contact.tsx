@@ -307,17 +307,15 @@ export default function Contact() {
                 variant="neon"
                 className="bg-white/10 border-white/20 text-white hover:bg-white/20 rounded-xl"
                 onClick={() => {
-                  // 1) CV dosyasını indir
                   const link = document.createElement("a");
-                  link.href = "/cv.pdf"; // public klasörüne koyduğun CV dosyanın yolu
+                  link.href = "/oguzhan-dogan-cv.pdf";
                   link.download = "Oguzhan_Dogan_CV.pdf";
                   link.click();
 
-                  // 2) Toast bildirimi
                   toast({
                     title: "Download started 🚀",
                     description:
-                      "Your CV is being downloaded. Thanks for checking it out!",
+                      "Your CV is downloaded. Thanks for checking it out!",
                   });
                 }}
               >
