@@ -9,6 +9,10 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+app.get("/", (req, res) => {
+  res.send("✅ Server is running");
+});
+
 app.post("/contact", async (req, res) => {
   const { name, email, subject, message } = req.body;
 
@@ -18,28 +22,38 @@ app.post("/contact", async (req, res) => {
 
   try {
     const transporter = nodemailer.createTransport({
-      service: "gmail",
+      host: "smtp.office365.com",
+      port: 587,
+      secure: false,
       auth: {
         user: process.env.MY_EMAIL,
-        pass: process.env.MY_EMAIL_PASS, // Gmail App Password
+        pass: process.env.MY_EMAIL_APP_PASS,
       },
     });
 
     await transporter.sendMail({
-      from: `"${name}" <${email}>`,
+      from: process.env.MY_EMAIL,
+      replyTo: email,
       to: process.env.MY_EMAIL,
-      subject,
-      text: message,
+      subject: subject,
+      html: `
+        <p><b>From:</b> ${name} (${email})</p>
+        <p><b>Subject:</b> ${subject}</p>
+        <p>${message}</p>
+      `,
     });
 
-    res.json({ success: true });
+    res.json({ success: true, message: "Message sent successfully ✅" });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ success: false, error: "Failed to send" });
+    console.error("❌ Mail error:", err);
+    res.status(500).json({
+      success: false,
+      error: err.message || "Failed to send message",
+    });
   }
 });
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () =>
-  console.log(`🚀 Server running on http://localhost:${PORT}`)
-);
+const PORT = process.env.PORT || 8080;
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on http://localhost:${PORT}`);
+});

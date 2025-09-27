@@ -10,6 +10,7 @@ import {
   Calendar,
   Download,
   Phone,
+  Loader2,
 } from "lucide-react";
 import { Button } from "../components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -26,14 +27,41 @@ export default function Contact() {
     subject: "",
     message: "",
   });
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    toast({
-      title: "Message sent successfully!",
-      description: "Thank you for reaching out. I'll respond within 24 hours.",
-    });
-    setFormData({ name: "", email: "", subject: "", message: "" });
+    setIsLoading(true);
+
+    try {
+      const res = await fetch("https://formspree.io/f/mzzjdagg", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      if (res.ok) {
+        toast({
+          title: "✅ Message sent successfully!",
+          description:
+            "Thank you for contacting with me. I will respond within 24 hours.",
+        });
+        setFormData({ name: "", email: "", subject: "", message: "" });
+      } else {
+        const error = await res.json();
+        toast({
+          title: "❌ Failed to send",
+          description: error.error || "Something went wrong.",
+        });
+      }
+    } catch (err) {
+      toast({
+        title: "⚠️ Network error",
+        description: "Could not reach Internet.",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleChange = (
@@ -110,9 +138,7 @@ export default function Contact() {
           </p>
         </motion.div>
 
-        {/* Grid with equal height cards */}
         <div className="grid lg:grid-cols-3 gap-5 items-stretch">
-          {/* Contact Info */}
           <motion.div
             initial={{ opacity: 0, x: -40 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -177,7 +203,6 @@ export default function Contact() {
             </div>
           </motion.div>
 
-          {/* Form */}
           <motion.div
             initial={{ opacity: 0, x: 40 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -206,7 +231,6 @@ export default function Contact() {
                       value={formData.name}
                       onChange={handleChange}
                       required
-                      className="h-12 bg-background border-border focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-300"
                     />
                   </motion.div>
 
@@ -221,7 +245,6 @@ export default function Contact() {
                       value={formData.email}
                       onChange={handleChange}
                       required
-                      className="h-12 bg-background border-border focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-300"
                     />
                   </motion.div>
                 </div>
@@ -236,7 +259,6 @@ export default function Contact() {
                     value={formData.subject}
                     onChange={handleChange}
                     required
-                    className="h-12 bg-background border-border focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-300"
                   />
                 </motion.div>
 
@@ -246,12 +268,11 @@ export default function Contact() {
                   </label>
                   <Textarea
                     name="message"
-                    placeholder="Tell me about the role, your team and how I could contribute. -OR- Tell me about the project you have in mind, your timeline and how I can support you in building it."
+                    placeholder="Tell me about the role, your team and how I could contribute..."
                     value={formData.message}
                     onChange={handleChange}
                     required
                     rows={6}
-                    className="bg-background border-border focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-300 resize-none"
                   />
                 </motion.div>
 
@@ -262,13 +283,21 @@ export default function Contact() {
                   <Button
                     type="submit"
                     size="lg"
+                    disabled={isLoading}
                     className="w-full h-14 text-lg font-semibold rounded-xl
-                               bg-red-500 hover:bg-red-600 hover:border hover:border-orange-500 hover:animate-pulse
-                               text-white hover:shadow-lg hover:shadow-orange-500
-                               transition-all duration-300 relative overflow-hidden"
+                               bg-red-500 hover:bg-red-600 text-white transition-all duration-300"
                   >
-                    <Send className="w-5 h-5 mr-3" />
-                    Send Message
+                    {isLoading ? (
+                      <>
+                        <Loader2 className="w-5 h-5 mr-3 animate-spin" />
+                        Sending...
+                      </>
+                    ) : (
+                      <>
+                        <Send className="w-5 h-5 mr-3" />
+                        Send Message
+                      </>
+                    )}
                   </Button>
                 </motion.div>
               </form>
