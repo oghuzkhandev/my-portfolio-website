@@ -304,8 +304,22 @@ export default function Contact() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center mt-6">
               <Button
                 size="lg"
-                variant="outline"
+                variant="neon"
                 className="bg-white/10 border-white/20 text-white hover:bg-white/20 rounded-xl"
+                onClick={() => {
+                  // 1) CV dosyasını indir
+                  const link = document.createElement("a");
+                  link.href = "/cv.pdf"; // public klasörüne koyduğun CV dosyanın yolu
+                  link.download = "Oguzhan_Dogan_CV.pdf";
+                  link.click();
+
+                  // 2) Toast bildirimi
+                  toast({
+                    title: "Download started 🚀",
+                    description:
+                      "Your CV is being downloaded. Thanks for checking it out!",
+                  });
+                }}
               >
                 <Download className="w-4 h-4 mr-2" />
                 Download CV
@@ -313,6 +327,7 @@ export default function Contact() {
               <Button
                 size="lg"
                 className="bg-white text-slate-900 hover:bg-slate-100 rounded-xl"
+                variant="neon"
               >
                 <Calendar className="w-4 h-4 mr-2" />
                 Schedule a Call

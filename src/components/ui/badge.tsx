@@ -3,7 +3,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const badgeVariants = cva(
-  "inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
+  "inline-flex items-center rounded-full px-3 py-1 text-xs font-bold transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 uppercase tracking-wider",
   {
     variants: {
       variant: {
@@ -13,10 +13,12 @@ const badgeVariants = cva(
           "border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80",
         destructive:
           "border-transparent bg-destructive text-destructive-foreground hover:bg-destructive/80",
-        outline: "text-foreground",
+        outline: "text-foreground border border-gray-500/50",
+
         gradient:
-          "border-transparent bg-gradient-to-r from-primary to-accent-cyan text-white hover:shadow-glow",
-        glow: "border-transparent bg-primary/20 text-primary border-primary/30 hover:bg-primary/30 hover:shadow-glow",
+          "border-transparent bg-gradient-to-br from-cyan-600 to-yellow-600 text-white shadow-lg shadow-purple-500/40 hover:shadow-xl hover:shadow-purple-500/60 transition-all transform hover:-translate-y-[1px]",
+
+        glow: "border border-fuchsia-400/60 bg-gray-800/60 text-fuchsia-300 backdrop-blur-sm shadow-md shadow-fuchsia-500/20 hover:border-fuchsia-400/80 hover:bg-gray-800/80 hover:shadow-fuchsia-500/40 transition-all",
       },
     },
     defaultVariants: {
